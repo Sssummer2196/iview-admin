@@ -107,7 +107,7 @@ export default [
         },
         component: () => import('@/view/attendance/attendance.vue')
         // component: () => import('@/view/components/tables/tables.vue')
-      },
+      }
     ]
   },
   {
@@ -126,7 +126,7 @@ export default [
           title: '我的任务'
         },
         component: () => import('@/view/task/task.vue')
-      },
+      }
     ]
   },
   {
@@ -145,7 +145,7 @@ export default [
           title: '评分系统'
         },
         component: () => import('@/view/mark/mark.vue')
-      },
+      }
     ]
   },
   {
@@ -164,7 +164,7 @@ export default [
           title: '我的绩效'
         },
         component: () => import('@/view/performance/performance.vue')
-      },
+      }
     ]
   },
   {
@@ -183,11 +183,9 @@ export default [
           title: '我的团队'
         },
         component: () => import('@/view/team/team.vue')
-      },
+      }
     ]
   },
-
-
   {
     path: '',
     name: 'doc',

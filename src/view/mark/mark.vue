@@ -1,12 +1,13 @@
 <template>
+  <Row>
 
+  </Row>
 </template>
 
 <script>
-  export default {
-    name: 'mark_page',
-    data () {
-
-    }
+export default {
+  name: 'mark_page',
+  data () {
   }
+}
 </script>

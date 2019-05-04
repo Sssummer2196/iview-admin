@@ -1,12 +1,13 @@
 <template>
+  <Row>
 
+  </Row>
 </template>
 
 <script>
-  export default {
-    name: 'performance_page',
-    data () {
-
-    }
+export default {
+  name: 'performance_page',
+  data () {
   }
+}
 </script>
