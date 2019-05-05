@@ -13,8 +13,20 @@
       <Tag type="dot" v-for="item in labelList" v-bind:key="item.param" closable style="margin-left: 5px;" @on-close="clearParam(item.value, item.param)">{{item.label}}</Tag>
       <span style="color: #348EED; cursor: pointer; margin-left: 10px;" @click="clearAllParam" v-show="labelList.length !== 0">清空搜索条件</span>
     </Row>
+    <Row style="font-weight: bolder; width: 100%">
+      <Col span="6" style="text-align: center">任务名称</Col>
+      <Col span="2" style="text-align: center">完成度</Col>
+      <Col span="2" style="text-align: center">负责人</Col>
+      <Col span="1" style="text-align: center">权重</Col>
+      <Col span="3" style="text-align: center">发布时间</Col>
+      <Col span="3" style="text-align: center">截止时间</Col>
+      <Col span="3" style="text-align: center">更新时间</Col>
+      <Col span="2" style="text-align: center">审批状态</Col>
+      <Col span="2" style="text-align: center">操作</Col>
+    </Row>
+    <Divider />
     <Row>
-      <Table :columns="columns1" :data="data1"></Table>
+      <Tree :data="data5" :render="renderContent"></Tree>
     </Row>
   </Card>
 </template>
@@ -22,6 +34,32 @@
 <script>
 export default {
   name: 'task_page',
+  mounted: function () {
+    let temp = JSON.parse(JSON.stringify(this.componentData))
+    temp.render = this.componentData.render
+    temp.completeRate = 20
+    temp.strokeColor = this.getProcessColor(temp.completeRate)
+    this.data5.push(temp)
+    temp = JSON.parse(JSON.stringify(this.componentData))
+    temp.render = this.componentData.render
+    temp.completeRate = 60
+    temp.strokeColor = this.getProcessColor(temp.completeRate)
+    this.data5.push(temp)
+    temp = JSON.parse(JSON.stringify(this.componentData))
+    temp.render = this.componentData.render
+    temp.completeRate = 88
+    temp.strokeColor = this.getProcessColor(temp.completeRate)
+    this.data5.push(temp)
+    temp = JSON.parse(JSON.stringify(this.componentData))
+    temp.render = this.componentData.render
+    temp.completeRate = 100
+    temp.strokeColor = this.getProcessColor(temp.completeRate)
+    this.data5[1].children.push(temp)
+
+    console.log(temp)
+    console.log(this.componentData)
+    console.log(this.data5)
+  },
   watch: {
     type: function () {
       let mark = 0
@@ -66,6 +104,79 @@ export default {
     }
   },
   methods: {
+    getProcessColor (data) {
+      if (data >= 0 && data < 50) {
+        return '#ff0033'
+      }
+      if (data >= 50 && data < 80) {
+        return '#ffff66'
+      }
+      if (data >= 80 && data < 100) {
+        return '#00ffff'
+      }
+      return '#00ff66'
+    },
+    renderContent (h, { root, node, data }) {
+      return h('span', {
+        style: {
+          display: 'inline-block',
+          width: '100%'
+        }
+      }, [
+        h('span', [
+          h('Icon', {
+            props: {
+              type: 'ios-paper-outline'
+            },
+            style: {
+              marginRight: '8px'
+            }
+          }),
+          h('span', data.title)
+        ]),
+        h('span', {
+          style: {
+            display: 'inline-block',
+            float: 'right',
+            marginRight: '32px'
+          }
+        }, [
+          h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+              icon: 'ios-add'
+            }),
+            style: {
+              marginRight: '8px'
+            },
+            on: {
+              click: () => { this.append(data) }
+            }
+          }),
+          h('Button', {
+            props: Object.assign({}, this.buttonProps, {
+              icon: 'ios-remove'
+            }),
+            on: {
+              click: () => { this.remove(root, node, data) }
+            }
+          })
+        ])
+      ])
+    },
+    append (data) {
+      const children = data.children || []
+      children.push({
+        title: 'appended node',
+        expand: true
+      })
+      this.$set(data, 'children', children)
+    },
+    remove (root, node, data) {
+      const parentKey = root.find(el => el === node).parent
+      const parent = root.find(el => el.nodeKey === parentKey).node
+      const index = parent.children.indexOf(data)
+      parent.children.splice(index, 1)
+    },
     searchData () {
 
     },
@@ -100,6 +211,170 @@ export default {
   },
   data () {
     return {
+      componentData: {
+        title: '优化平台体验，促进用户注册产品',
+        taskName: '优化平台体验，促进用户注册产品',
+        completeRate: 90,
+        contactMan: '韩业红',
+        rate: '50%',
+        createTime: '2019-5-4 15:00',
+        endTime: '2019-5-8 15:00',
+        updateTime: '2019-5-5 12:42',
+        auditStatus: '未提交',
+        strokeColor: '',
+        expand: false,
+        doSth: false,
+        render: (h, { root, node, data }) => {
+          return h('div', {
+            style: {
+              display: 'inline-block',
+              width: '100%'
+            }
+          }, [
+            h('span', [
+              h('Icon', {
+                props: {
+                  type: 'ios-bookmark-outline'
+                },
+                style: {
+                  marginRight: '8px',
+                  fontSize: '20px'
+                }
+              }),
+              h('span', {
+                style: {
+                  cursor: 'pointer',
+                  color: '#348EED',
+                  width: '20%',
+                  display: 'inline-block',
+                  whiteSpace: 'normal'
+                }
+              }, data.taskName)
+            ]),
+            h('span', {
+              style: {
+                marginLeft: '10px',
+                width: '10%',
+                display: 'inline-block'
+              }
+            }, [
+              h('Progress', {
+                props: {
+                  percent: data.completeRate,
+                  strokeColor: data.strokeColor
+                }
+              })
+            ]),
+            h('span', {
+              style: {
+                marginLeft: '5px',
+                width: '4%',
+                display: 'inline-block'
+              }
+            }, data.contactMan),
+            h('span', {
+              style: {
+                marginLeft: '30px',
+                width: '3%',
+                display: 'inline-block'
+              }
+            }, data.rate),
+            h('span', {
+              style: {
+                marginLeft: '2.5%',
+                width: '10%',
+                display: 'inline-block'
+              }
+            }, data.createTime),
+            h('span', {
+              style: {
+                marginLeft: '2.5%',
+                width: '10%',
+                display: 'inline-block'
+              }
+            }, data.endTime),
+            h('span', {
+              style: {
+                marginLeft: '2.5%',
+                width: '10%',
+                display: 'inline-block'
+              }
+            }, data.updateTime),
+            h('span', {
+              style: {
+                marginLeft: '2.5%',
+                width: '5%',
+                display: 'inline-block'
+              }
+            }, data.auditStatus),
+            h('span', {
+              style: {
+                float: 'right',
+                marginRight: '1.5%',
+                marginTop: '-10px',
+                width: '5%',
+                color: '#00CC00',
+                fontSize: '20px',
+                cursor: 'pointer',
+                display: 'inline-block'
+              }
+            }, [
+              h('span', {
+                on: {
+                  click: () => {
+                    data.doSth = !data.doSth
+                  }
+                }
+              }, [
+                h('Icon', {
+                  props: {
+                    type: 'md-arrow-dropdown'
+                  }
+                })
+              ]),
+              h('DropdownMenu', {
+                props: {
+                  slot: 'list'
+                },
+                directives: [
+                  {
+                    name: 'show',
+                    value: data.doSth
+                  }
+                ]
+              }, [
+                h('DropdownItem', {
+                  style: {
+                    width: '60px'
+                  }
+                }, '删除'),
+                h('DropdownItem', {
+                  style: {
+                    width: '60px'
+                  }
+                }, '提交'),
+                h('DropdownItem', {
+                  style: {
+                    width: '60px'
+                  }
+                }, '修改'),
+                h('DropdownItem', {
+                  style: {
+                    width: '60px'
+                  }
+                }, '新增')
+              ])
+            ]),
+            h('Divider')
+          ])
+        },
+        children: []
+      },
+      data5: [],
+      buttonProps: {
+        type: 'default',
+        size: 'small'
+      },
       count: 3,
       chooseDate: [],
       labelList: [],
@@ -155,7 +430,17 @@ export default {
           key: 'taskName',
           align: 'center',
           fixed: 'left',
-          width: 300
+          width: 300,
+          render: (h, params) => {
+            return h('div', [
+              h('Icon', {
+                props: {
+                  type: 'person'
+                }
+              }),
+              h('strong', params.row.taskName)
+            ])
+          }
         },
         {
           title: '完成度',
@@ -206,48 +491,6 @@ export default {
           align: 'center',
           fixed: 'right',
           width: 150
-        }
-      ],
-      data1: [
-        {
-          taskName: '优化平台体验，促进用户注册产品',
-          completeRate: '90%',
-          contactMan: '韩业红',
-          rate: '3',
-          createTime: '2019-5-4 15:00',
-          endTime: '2019-5-8 15:00',
-          updateTime: '2019-5-5 12:42',
-          auditStatus: '未提交'
-        },
-        {
-          taskName: '优化平台体验，促进用户注册产品',
-          completeRate: '90%',
-          contactMan: '韩业红',
-          rate: '3',
-          createTime: '2019-5-4 15:00',
-          endTime: '2019-5-8 15:00',
-          updateTime: '2019-5-5 12:42',
-          auditStatus: '未提交'
-        },
-        {
-          taskName: '优化平台体验，促进用户注册产品',
-          completeRate: '90%',
-          contactMan: '韩业红',
-          rate: '3',
-          createTime: '2019-5-4 15:00',
-          endTime: '2019-5-8 15:00',
-          updateTime: '2019-5-5 12:42',
-          auditStatus: '未提交'
-        },
-        {
-          taskName: '优化平台体验，促进用户注册产品',
-          completeRate: '90%',
-          contactMan: '韩业红',
-          rate: '3',
-          createTime: '2019-5-4 15:00',
-          endTime: '2019-5-8 15:00',
-          updateTime: '2019-5-5 12:42',
-          auditStatus: '未提交'
         }
       ]
     }
