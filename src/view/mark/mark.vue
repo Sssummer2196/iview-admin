@@ -4,13 +4,7 @@
       <span style="color: #0099ff; font-size: 28px; font-weight: bolder">2018年底绩效评分</span>
     </Row>
     <Row>
-      <Col style="width: 150px; height: 150px; border: 1px #ccc solid; background: #ccc; float: left">
-        <Col style="width: 90%; height:90%; margin: 5%; border: 1px #fff solid; background: #fff;">
-          <Col style="width: 96%; height:96%; margin: 2%; border: 1px #fff solid;">
-            <img style="width: 100%; height:100%;" src="../../assets/images/tx.jpg" />
-          </Col>
-        </Col>
-      </Col>
+      <avatar style="float: left;" :img-url="imgUrl"></avatar>
       <Col style="float: left; margin-left: 10px;">
         <Row style="color: #58cc00; font-size: 28px; margin: 10px;">
           <span>韩业黄</span>
@@ -94,10 +88,13 @@
 </template>
 
 <script>
+import avatar from '../../components/avatar/avatar.vue'
 export default {
   name: 'mark_page',
+  components: { avatar },
   data () {
     return {
+      imgUrl: '../../assets/images/tx.jpg',
       selectOptions: [
         {
           value: 0,

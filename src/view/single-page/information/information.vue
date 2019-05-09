@@ -4,6 +4,9 @@
       <Card shadow >
         <Row>
           <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
+            <FormItem label="头像">
+              <avatar img-url="https://cloud-minapp-22871.cloud.ifanrusercontent.com/1gZyi2P6x0yplHWi.jpg"></avatar>
+            </FormItem>
             <FormItem label="姓名" prop="username">
               <Input v-model="formValidate.username" style="width: 350px" readonly></Input>
             </FormItem>
@@ -89,135 +92,139 @@
 </template>
 
 <script>
-  export default {
-    name: 'information_page',
-    data () {
-      const validateOldPass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入你的原密码'));
-        } else {
-          if (value !== '123456') {
-            callback(new Error('请输入正确的密码'));
-          }
-          callback();
+import avatar from '../../../components/avatar/avatar.vue'
+export default {
+  name: 'information_page',
+  components: { avatar },
+  data () {
+    const validateOldPass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入你的原密码'))
+      } else {
+        if (value !== '123456') {
+          callback(new Error('请输入正确的密码'))
         }
-      };
-      const validateNewPass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入你的新密码'));
-        } else if(value === this.formCustom.old_passwd){
-          callback(new Error('新密码不能与原密码相同'));
-        } else {
-          if (this.formCustom.passwdCheck !== '') {
-            // 对第二个密码框单独验证
-            this.$refs.formCustom.validateField('passwdCheck');
-          }
-          callback();
-        }
-      };
-      const validatePassCheck = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入新密码'));
-        } else if (value !== this.formCustom.new_passwd) {
-          callback(new Error('两次输入的密码不一致'));
-        } else {
-          callback();
-        }
-      };
-      return {
-        formValidate: {
-          username: '张三',
-          user_id: '20191001',
-          dept_name: '销售部',
-          position: '初级顾问',
-          gender: '',
-          birthday: '',
-          identity: '',
-          politics: '',
-          mail: '',
-          telephone: '',
-          native_place: '',
-          address: '',
-        },
-        ruleValidate: {
-          gender: [
-            { required: true, message: '请选择性别', trigger: 'change' }
-          ],
-          birthday: [
-            { required: true, type: 'date', message: '请选择你的出生日期', trigger: 'change' }
-           ],
-          identity: [
-            { required: true, type: 'string', message: '身份证号不能为空', trigger: 'blur' },
-            {
-              validator(rule, value, callback) {
-                let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-                const errors = [];
-                if(reg.test(value) === false) {
-                  errors.push('身份证输入不合法')
-                }
-                callback(errors);
-              }, trigger: 'blur'
-            }
-          ],
-          politics: [
-            { required: true, message: '请选择你的政治面貌', trigger: 'change' }
-          ],
-          mail: [
-            { required: true, message: '邮箱不能为空', trigger: 'blur' },
-            { type: 'email', message: '请填写正确的邮箱号', trigger: 'blur' }
-          ],
-          telephone: [
-            { required: true, message: '手机号不能为空', trigger: 'blur' },
-            {
-              validator(rule, value, callback) {
-                let reg = /^1[3456789]\d{9}$/;
-                const errors = [];
-                if(reg.test(value) === false) {
-                  errors.push('手机号输入不合法')
-                }
-                callback(errors);
-              }, trigger: 'blur'
-            }
-          ],
-          native_place: [
-            { required: true, message: '籍贯不能为空', trigger: 'blur' }
-          ],
-          address: [
-            { required: false, type: 'string', trigger: 'blur' }
-          ]
-        },
-        formCustom: {
-          old_passwd: '',
-          new_passwd: '',
-          passwdCheck: ''
-        },
-        ruleCustom: {
-          old_passwd: [
-            { validator: validateOldPass, trigger: 'blur' }
-          ],
-          new_passwd: [
-            { validator: validateNewPass, trigger: 'blur' }
-          ],
-          passwdCheck: [
-            { validator: validatePassCheck, trigger: 'blur' }
-          ]
-        }
-      }
-    },
-    methods: {
-      handleSubmit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            this.$Message.success('保存成功!');
-          } else {
-            this.$Message.error('保存失败!');
-          }
-        })
-      },
-      handleReset (name) {
-        this.$refs[name].resetFields();
+        callback()
       }
     }
+    const validateNewPass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入你的新密码'))
+      } else if (value === this.formCustom.old_passwd) {
+        callback(new Error('新密码不能与原密码相同'))
+      } else {
+        if (this.formCustom.passwdCheck !== '') {
+          // 对第二个密码框单独验证
+          this.$refs.formCustom.validateField('passwdCheck')
+        }
+        callback()
+      }
+    }
+    const validatePassCheck = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入新密码'))
+      } else if (value !== this.formCustom.new_passwd) {
+        callback(new Error('两次输入的密码不一致'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      formValidate: {
+        username: '张三',
+        user_id: '20191001',
+        dept_name: '销售部',
+        position: '初级顾问',
+        gender: '',
+        birthday: '',
+        identity: '',
+        politics: '',
+        mail: '',
+        telephone: '',
+        native_place: '',
+        address: '',
+        imgUrl: '../../assets/images/tx.jpg'
+      },
+      ruleValidate: {
+        gender: [
+          { required: true, message: '请选择性别', trigger: 'change' }
+        ],
+        birthday: [
+          { required: true, type: 'date', message: '请选择你的出生日期', trigger: 'change' }
+        ],
+        identity: [
+          { required: true, type: 'string', message: '身份证号不能为空', trigger: 'blur' },
+          {
+            validator (rule, value, callback) {
+              let reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/
+              const errors = []
+              if (reg.test(value) === false) {
+                errors.push('身份证输入不合法')
+              }
+              callback(errors)
+            },
+            trigger: 'blur'
+          }
+        ],
+        politics: [
+          { required: true, message: '请选择你的政治面貌', trigger: 'change' }
+        ],
+        mail: [
+          { required: true, message: '邮箱不能为空', trigger: 'blur' },
+          { type: 'email', message: '请填写正确的邮箱号', trigger: 'blur' }
+        ],
+        telephone: [
+          { required: true, message: '手机号不能为空', trigger: 'blur' },
+          {
+            validator (rule, value, callback) {
+              let reg = /^1[3456789]\d{9}$/
+              const errors = []
+              if (reg.test(value) === false) {
+                errors.push('手机号输入不合法')
+              }
+              callback(errors)
+            },
+            trigger: 'blur'
+          }
+        ],
+        native_place: [
+          { required: true, message: '籍贯不能为空', trigger: 'blur' }
+        ],
+        address: [
+          { required: false, type: 'string', trigger: 'blur' }
+        ]
+      },
+      formCustom: {
+        old_passwd: '',
+        new_passwd: '',
+        passwdCheck: ''
+      },
+      ruleCustom: {
+        old_passwd: [
+          { validator: validateOldPass, trigger: 'blur' }
+        ],
+        new_passwd: [
+          { validator: validateNewPass, trigger: 'blur' }
+        ],
+        passwdCheck: [
+          { validator: validatePassCheck, trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    handleSubmit (name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$Message.success('保存成功!')
+        } else {
+          this.$Message.error('保存失败!')
+        }
+      })
+    },
+    handleReset (name) {
+      this.$refs[name].resetFields()
+    }
   }
+}
 </script>
-
