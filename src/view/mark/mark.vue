@@ -1,5 +1,5 @@
 <template>
-  <Row style="padding: 40px;">
+  <Card style="padding: 40px;">
     <Row>
       <span style="color: #0099ff; font-size: 28px; font-weight: bolder">2018年底绩效评分</span>
     </Row>
@@ -84,7 +84,7 @@
     <Row style="margin-top: 10px;">
       <Button style="float: right" type="primary" shape="circle" size="large">提交</Button>
     </Row>
-  </Row>
+  </Card>
 </template>
 
 <script>

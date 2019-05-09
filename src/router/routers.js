@@ -187,6 +187,36 @@ export default [
     ]
   },
   {
+    path: '/informationInput',
+    name: 'informationInput',
+    meta: {
+      icon: 'ios-create',
+      title: '信息录入',
+      hideInMenu: false
+    },
+    component: Main,
+    children: [
+      {
+        path: 'userInformation_page',
+        name: 'userInformation_page',
+        meta: {
+          icon: 'md-person-add',
+          title: '用户信息录入'
+        },
+        component: () => import('@/view/informationInput/userInformation.vue')
+      },
+      {
+        path: 'deptInformation_page',
+        name: 'deptInformation_page',
+        meta: {
+          icon: 'md-home',
+          title: '部门信息录入'
+        },
+        component: () => import('@/view/informationInput/deptInformation.vue')
+      }
+    ]
+  },
+  {
     path: '',
     name: 'doc',
     meta: {
@@ -222,7 +252,7 @@ export default [
     meta: {
       icon: 'logo-buffer',
       title: '组件',
-      hideInMenu: false
+      hideInMenu: true
     },
     component: Main,
     children: [

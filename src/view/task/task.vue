@@ -1,34 +1,81 @@
 <template>
-  <Card style="padding: 10px; width: 100%">
-    <Row>
-      <Col>
-        <i-button style="float: right;" type="primary" shape="circle" icon="ios-search" @on-click="searchData"></i-button>
-        <Select placeholder="审批状态" style="width:100px; float: right; margin-right: 10px;" v-model="type" clearable>
-          <i-option v-for="item in typeList" v-bind:key="item.value" :value="item.value">{{ item.label }}</i-option>
-        </Select>
-        <Date-picker type="daterange" @on-change="changeDate" placement="bottom-end" placeholder="选择日期" style="width: 200px; float: right; margin-right: 10px;"></Date-picker>
-      </Col>
-    </Row>
-    <Row style="width: 100%; background: #f0f0f0; height: auto; margin-top: 20px; line-height: 40px;">
-      <Tag type="dot" v-for="item in labelList" v-bind:key="item.param" closable style="margin-left: 5px;" @on-close="clearParam(item.value, item.param)">{{item.label}}</Tag>
-      <span style="color: #348EED; cursor: pointer; margin-left: 10px;" @click="clearAllParam" v-show="labelList.length !== 0">清空搜索条件</span>
-    </Row>
-    <Row style="font-weight: bolder; width: 100%">
-      <Col span="6" style="text-align: center">任务名称</Col>
-      <Col span="2" style="text-align: center">完成度</Col>
-      <Col span="2" style="text-align: center">负责人</Col>
-      <Col span="1" style="text-align: center">权重</Col>
-      <Col span="3" style="text-align: center">发布时间</Col>
-      <Col span="3" style="text-align: center">截止时间</Col>
-      <Col span="3" style="text-align: center">更新时间</Col>
-      <Col span="2" style="text-align: center">审批状态</Col>
-      <Col span="2" style="text-align: center">操作</Col>
-    </Row>
-    <Divider />
-    <Row>
-      <Tree :data="data5" :render="renderContent"></Tree>
-    </Row>
-  </Card>
+  <Row>
+    <Card style="padding: 10px; width: 100%">
+      <Row>
+        <Col>
+          <i-button style="float: right;" type="primary" shape="circle" icon="ios-search" @on-click="searchData"></i-button>
+          <Select placeholder="审批状态" style="width:100px; float: right; margin-right: 10px;" v-model="type" clearable>
+            <i-option v-for="item in typeList" v-bind:key="item.value" :value="item.value">{{ item.label }}</i-option>
+          </Select>
+          <Date-picker type="daterange" @on-change="changeDate" placement="bottom-end" placeholder="选择日期" style="width: 200px; float: right; margin-right: 10px;"></Date-picker>
+        </Col>
+      </Row>
+      <Row style="width: 100%; background: #f0f0f0; height: auto; margin-top: 20px; line-height: 40px;">
+        <Tag type="dot" v-for="item in labelList" v-bind:key="item.param" closable style="margin-left: 5px;" @on-close="clearParam(item.value, item.param)">{{item.label}}</Tag>
+        <span style="color: #348EED; cursor: pointer; margin-left: 10px;" @click="clearAllParam" v-show="labelList.length !== 0">清空搜索条件</span>
+      </Row>
+      <Row style="font-weight: bolder; width: 100%">
+        <Col span="6" style="text-align: center">任务名称</Col>
+        <Col span="2" style="text-align: center">完成度</Col>
+        <Col span="2" style="text-align: center">负责人</Col>
+        <Col span="1" style="text-align: center">权重</Col>
+        <Col span="3" style="text-align: center">发布时间</Col>
+        <Col span="3" style="text-align: center">截止时间</Col>
+        <Col span="3" style="text-align: center">更新时间</Col>
+        <Col span="2" style="text-align: center">审批状态</Col>
+        <Col span="2" style="text-align: center">操作</Col>
+      </Row>
+      <Divider />
+      <Row>
+        <Tree :data="data5" :render="renderContent"></Tree>
+      </Row>
+    </Card>
+    <Card style="margin-top: 20px;">
+      <Row style="font-size: 20px; color: #495060;">
+        <span>任务详情</span>
+      </Row>
+      <Row style="font-size: 20px; color: #348EED; margin-top: 10px;">
+        <span>弹幕系统用户调研，形成用户调研报告</span>
+      </Row>
+      <Row style="font-size: 17px; color: #33cc00">
+        <Col style="float: left">
+          <span>负责人：韩业黄</span>
+        </Col>
+        <Col style="float: left; margin-left: 50px;">
+          <span>所属部门：产品部</span>
+        </Col>
+      </Row>
+      <Row style="margin-top: 20px; color: #515a6e">
+        <Col>
+          <span>发布日期：2019-04-03</span>
+        </Col>
+        <Col style="margin-top: 3px;">
+          <span>截止日期：2019-04-30</span>
+          <span style="color: red; margin-left: 30px;">距离截止日期还剩3天</span>
+        </Col>
+        <Col style="margin-top: 3px;">
+          <span style="float: left">最近更新时间：2019-04-03 11:30</span>
+          <Progress style="float: left; margin-left: 30px; width: 100px;" percent='60'></Progress>
+        </Col>
+      </Row>
+      <Row style="margin-top: 20px;">
+        <div>任务详细介绍</div>
+        <i-input type="textarea" :rows="5"></i-input>
+      </Row>
+      <Row style="margin-top: 20px;">
+        <div>任务内容提交</div>
+        <i-input type="textarea" :rows="5"></i-input>
+      </Row>
+      <Row style="margin-top: 20px;">
+        <Upload action="//jsonplaceholder.typicode.com/posts/">
+          <i-button type="ghost" icon="ios-cloud-upload-outline" style="color: #ccc; border: 1px #ccc solid;">添加附件</i-button>
+        </Upload>
+      </Row>
+      <Row style="margin-top: 20px;">
+        <Button style="float: right" type="primary" shape="circle" size="large">提交</Button>
+      </Row>
+    </Card>
+  </Row>
 </template>
 
 <script>
@@ -211,6 +258,7 @@ export default {
   },
   data () {
     return {
+      modal: true,
       componentData: {
         title: '优化平台体验，促进用户注册产品',
         taskName: '优化平台体验，促进用户注册产品',
@@ -362,7 +410,7 @@ export default {
                   style: {
                     width: '60px'
                   }
-                }, '新增')
+                }, '分配')
               ])
             ]),
             h('Divider')
